@@ -42,32 +42,21 @@ export function AdminLoginPage() {
     setSubmitError(null);
 
     try {
-      const response = await fetch('/api/auth/login', {
+      const API_URL = import.meta.env.VITE_API_URL;
+
+      const response = await fetch(`${API_URL}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
       });
 
-      const responseText = await response.text();
-      let payload: { success?: boolean; message?: string; token?: string } | null = null;
+      const payload = await response.json();
 
-      if (responseText) {
-        try {
-          payload = JSON.parse(responseText) as { success?: boolean; message?: string; token?: string };
-        } catch {
-          payload = null;
-        }
+      if (!response.ok || !payload.success) {
+        throw new Error(payload.message || 'Unable to sign in.');
       }
 
-      if (!response.ok) {
-        throw new Error(payload?.message || `Unable to sign in. Server responded with ${response.status}.`);
-      }
-
-      if (!payload?.success) {
-        throw new Error(payload?.message || 'Unable to sign in.');
-      }
-
-      window.localStorage.setItem('customer-feedback-admin', payload.token ?? '');
+      localStorage.setItem('customer-feedback-admin', payload.token);
       toast.success('Signed in successfully');
       navigate('/admin', { replace: true });
     } catch (error) {
