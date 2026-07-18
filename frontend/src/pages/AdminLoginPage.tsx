@@ -48,13 +48,26 @@ export function AdminLoginPage() {
         body: JSON.stringify(data),
       });
 
-      const payload = await response.json();
+      const responseText = await response.text();
+      let payload: { success?: boolean; message?: string; token?: string } | null = null;
 
-      if (!response.ok || !payload.success) {
-        throw new Error(payload.message || 'Unable to sign in.');
+      if (responseText) {
+        try {
+          payload = JSON.parse(responseText) as { success?: boolean; message?: string; token?: string };
+        } catch {
+          payload = null;
+        }
       }
 
-      window.localStorage.setItem('customer-feedback-admin', payload.token);
+      if (!response.ok) {
+        throw new Error(payload?.message || `Unable to sign in. Server responded with ${response.status}.`);
+      }
+
+      if (!payload?.success) {
+        throw new Error(payload?.message || 'Unable to sign in.');
+      }
+
+      window.localStorage.setItem('customer-feedback-admin', payload.token ?? '');
       toast.success('Signed in successfully');
       navigate('/admin', { replace: true });
     } catch (error) {
