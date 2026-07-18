@@ -4,7 +4,7 @@ describe('Admin auth', () => {
   const previousEnv = { ...process.env };
 
   beforeEach(() => {
-    process.env.MONGODB_URI = 'mongodb://127.0.0.1:27017/test';
+    process.env.MONGODB_URI = 'mongodb+srv://Baladev:SuperSecure123!@balanode.ozd5tum.mongodb.net/?appName=BalaNode';
     process.env.ADMIN_EMAIL = 'admin@gmail.com';
     process.env.ADMIN_PASSWORD = 'SuperSecure123!';
     process.env.JWT_SECRET = 'test-secret';

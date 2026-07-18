@@ -6,7 +6,7 @@ dotenv.config();
 const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
   PORT: z.coerce.number().int().positive().default(3000),
-  MONGODB_URI: z.string().min(1).default('mongodb://127.0.0.1:27017/customer-feedback-platform'),
+  MONGODB_URI: z.string().min(1).default('mongodb+srv://Baladev:SuperSecure123!@balanode.ozd5tum.mongodb.net/?appName=BalaNode'),
   CORS_ORIGIN: z.string().default('*'),
   RATE_LIMIT_WINDOW_MS: z.coerce.number().int().positive().default(900_000),
   RATE_LIMIT_MAX_REQUESTS: z.coerce.number().int().positive().default(100),
