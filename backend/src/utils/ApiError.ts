@@ -15,6 +15,8 @@ export class ApiError extends Error {
     this.details = details;
 
     Object.setPrototypeOf(this, ApiError.prototype);
-    Error.captureStackTrace(this, this.constructor);
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, this.constructor);
+    }
   }
 }
